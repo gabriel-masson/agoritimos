@@ -1,0 +1,52 @@
+//238.999.246-30 valido ; 705.484.450-54 false
+/*validar CPF
+705.484.450-54
+   7 0 5 4 8 4 4 5 0 
+X 10 9 8 7 6 5 4 3 2 multiplica cada um
+11 - (resultadoDaSoma % 11) == tem que ser igual
+o 5 do cpf
+se resultado da operação maio 9 ==0
+   7  0 5 4 8 4 4 5 0 5
+X 11 10 9 8 7 6 5 4 3 2 multiplica cada um
+mesmo que o de cima
+*/
+class ValidarCpf {
+	constructor(cpfEviado) {
+		Object.defineProperty(this,'cpfEnviado',{
+			value: cpfEviado.replace(/\D+/g, ""),
+			enumerable:true,
+			writable:true,
+			configurable:false
+		})
+	}
+	novoDigito(nCpf){
+		let idx = nCpf.length+1;
+//tranformando em nCpf em um array
+		let cpfArray= Array.from(nCpf)
+		let soma = cpfArray.reduce((acumulador,valor,indice) =>{
+			acumulador += valor*idx;
+			idx--;
+			return acumulador;
+			
+		},0)
+
+		let nDigit = 11 - (soma%11)
+		return nDigit <= 9?`${nDigit}`:`0`
+	}
+	validar(){
+		if(this.cpfEnviado.length != 11) return false;
+		if(typeof this.cpfEnviado != 'string')return false;
+    //pegar o cpf sem os dois ultimos digitos
+		let nCpf = this.cpfEnviado.slice(0,9)
+		nCpf += this.novoDigito(nCpf)
+		nCpf += this.novoDigito(nCpf)
+		return nCpf === this.cpfEnviado? true:false
+	}
+}
+let cpf = new ValidarCpf("238.999.246-30")
+console.log(cpf.validar())
+
+
+
+
+
